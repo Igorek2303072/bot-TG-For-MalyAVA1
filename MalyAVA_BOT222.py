@@ -80,14 +80,15 @@ def fetch_latest_news():
                 title = e.get("title", "").strip()
                 link = e.get("link", "")
                 desc = e.get("summary", e.get("description", ""))
-                clean_desc = BeautifulSoup(desc, "lxml").get_text() if desc else ""
+                # Заменено "lxml" на "html.parser"
+                clean_desc = BeautifulSoup(desc, "html.parser").get_text() if desc else ""
                 img_url = None
                 if "enclosures" in e and e.enclosures:
                     img_url = e.enclosures[0].get("href")
                 if not img_url and "media_content" in e:
                     img_url = e.media_content[0]["url"]
                 if not img_url and desc:
-                    soup = BeautifulSoup(desc, "lxml")
+                    soup = BeautifulSoup(desc, "html.parser")  # и здесь замена
                     img_tag = soup.find("img")
                     if img_tag and img_tag.get("src"):
                         img_url = img_tag["src"]
@@ -351,3 +352,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#2222
